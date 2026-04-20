@@ -1,0 +1,12 @@
+{
+  "config-service": {},
+  "env": {},
+  "dependencies": {
+    "@aws-sdk/client-ec2": "latest",
+    "@aws-sdk/client-iam": "latest",
+    "@aws-sdk/client-rds": "latest",
+    "@aws-sdk/client-s3": "latest",
+    "@aws-sdk/client-sts": "latest"
+  },
+  "devDependencies": {}
+}

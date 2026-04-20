@@ -1,0 +1,42 @@
+// !! ------------------------------------------------------------ //
+// !!               [Microservice] AWS Audit models                //
+// !! ------------------------------------------------------------ //
+// * AwsAuditProjectSetting                                        //
+// * AwsAuditScan                                                  //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+// Audit-specific per-project settings. AWS credentials are NOT stored here
+// any more; they now live in application.ProjectAwsCredential (aws-core).
+// The legacy credential columns are kept nullable for backward compatibility.
+model AwsAuditProjectSetting {
+  id              String    @id @default(uuid()) @db.Uuid
+  projectId       String    @unique @db.Uuid
+  awsAccountId    String?
+  iamUserName     String?
+  accessKeyId     String?
+  secretAccessKey String?
+  regions         String[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lastVerifiedAt  DateTime?
+
+  @@index([projectId])
+  @@schema("microservice/aws-audit")
+}
+
+model AwsAuditScan {
+  id           String    @id @default(uuid()) @db.Uuid
+  projectId    String    @db.Uuid
+  status       String    @db.VarChar(30)
+  errorMessage String?   @db.Text
+  summary      Json?
+  report       Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  startedAt    DateTime?
+  finishedAt   DateTime?
+
+  @@index([projectId])
+  @@index([projectId, createdAt])
+  @@schema("microservice/aws-audit")
+}
